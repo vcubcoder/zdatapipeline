@@ -1,6 +1,6 @@
 Z Data Pipeline
 =========================
-The goal of the project is to process the published change events coming from the legacy streams and expose an API for Dispatcher & Drivers association
+The goal of the project is to process the published change events coming from the legacy system and expose an API for Dispatcher & Drivers association
 
 ### Architecture
 ![kafka microservice](zpipeline_architecture.png "kafka microservice")
@@ -72,10 +72,10 @@ Refrential Integrity
 ### FAQ
 
 1. How does the system ensure that a Driver isn't associated to mulitple Dispatchers at any given time ?
-   Before adding any association for the driver, microservice queries the DB to find out any existing driver-dispatcher relationship exist and if does push the message to retry topic. A retry counter needs to setup to aviod indefinte loop, if its exceeds threshold it needs to move to DLQ
+Before adding any association for the driver, microservice queries the DB to find out any existing driver-dispatcher relationship exist and if does push the message to retry topic. A retry counter needs to setup to aviod indefinte loop, if its exceeds threshold it needs to move to DLQ
 
-2. What happens to HTTP call for /getdispatcher/{id} for the dispatcher not exist in DB
-   HTTP 404 or empty JSON   
+2. What happens to HTTP call for /getdispatcher/{id} for the dispatcher not exist in DB ?
+HTTP 404 or empty JSON   
 
 
 ## Original Context of the project
