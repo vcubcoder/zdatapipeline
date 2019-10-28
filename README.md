@@ -1,21 +1,21 @@
 Z Data Pipeline
 =========================
-The goal of the project is to process the published change events coming from the legacy system and expose an API for Dispatcher & Drivers association
+The goal of the project is to process the published change events coming from the legacy system and expose an API for Dispatcher & Driver association
 
 ### Architecture
 ![kafka microservice](zpipeline_architecture.png "kafka microservice")
 
 Architecture has 2 microservices :
-- Stream Processor, asyncronous microservice process the change events to create/delete dispatcher driver asscociation. It creates the Driver/ Dispatcher entities before it creates association 
+- Stream Processor, asyncronous microservice process the change events to add/delete dispatcher driver asscociation. It creates the Driver/ Dispatcher entities before it creates association 
   if entities not exisit in the Database.
--  ZAPI, synchronus microservice returns the drivers associated for the dispatcher given
+-  ZAPI, synchronus microservice returns the drivers associated for the dispatcher
 
 ### Alternate approach
- This architecture can be built without Redis as API DB for the data store for RestAPI as well. It requires SQL queries need to be executed for every GET call 
+ This architecture can also be built without Redis component, isntead use API DB as data source for RestAPI as well. It requires SQL queries need to be executed for every GET calls which may be slow in performance 
   
 Parition Keys
 --------------
-ChangeEvent topic is partitioned by DispatcherId key inorder to avoid race conditions on Redis Cache
+ChangeEvent topic is partitioned by DispatcherId key
 
 Technologies
 ------------
@@ -74,8 +74,8 @@ Refrential Integrity
 1. How does the system ensure that a Driver isn't associated to mulitple Dispatchers at any given time ?
 Before adding any association for the driver, microservice queries the DB to find out any existing driver-dispatcher relationship exist and if does push the message to retry topic. A retry counter needs to setup to aviod indefinte loop, if its exceeds threshold it needs to move to DLQ
 
-2. What happens to HTTP call for /getdispatcher/{id} for the dispatcher not exist in DB ?
-HTTP 404 or empty JSON   
+2. What happens to HTTP call for /getdispatcher/{id} for the dispatcher not exist in DB ?  
+    HTTP 404 or empty JSON   
 
 
 ## Original Context of the project
